@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [hidePass, setHidePass] = useState(true);
   const navigation = useNavigation();
 
   function SignUp() {
@@ -51,14 +52,27 @@ export default function Login() {
             onChangeText={(text) => setEmail(text)}
             placeholder="Digite seu e-mail..."
           />
-          <TextInput
-            style={styles.textInput}
-            value={senha}
-            onChangeText={(number) => setSenha(number)}
-            placeholder="Digite sua senha..."
-            keyboardType="numeric"
-            maxLength={6}
-          />
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TextInput
+              style={styles.textInput}
+              value={senha}
+              onChangeText={(number) => setSenha(number)}
+              placeholder="Digite sua senha..."
+              keyboardType="numeric"
+              secureTextEntry={hidePass} //* esconde a senha quando digitada *//
+              maxLength={6}
+            />
+            <TouchableOpacity
+              style={styles.iconEye}
+              onPress={() => setHidePass(!hidePass)}
+            >
+              <FontAwesome5
+                name={hidePass ? "eye-slash" : "eye"}
+                size={22}
+                color="#ccc"
+              />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity>
             <Text style={styles.textForgot}> esqueceu sua senha?</Text>
           </TouchableOpacity>
@@ -125,11 +139,18 @@ const styles = StyleSheet.create({
   },
   textInput: {
     backgroundColor: "#ffff",
+    width: "100%",
     height: 48,
     padding: 8,
     paddingLeft: 12,
     borderRadius: 8,
     marginTop: 12,
+    zIndex: 1,
+  },
+  iconEye: {
+    zIndex: 2,
+    marginLeft: "-12%",
+    marginTop: "3%",
   },
   textForgot: {
     marginTop: 8,
@@ -146,7 +167,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     paddingHorizontal: "15%",
-    borderRadius: 20,
+    borderRadius: 25,
     elevation: 1,
   },
   textFooter: {
