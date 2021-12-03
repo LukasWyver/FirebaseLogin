@@ -103,7 +103,6 @@ export default function SignUp() {
               value={passwordConfirm}
               onChangeText={(number) => setPasswordConfirm(number)}
               placeholder="Confirme sua senha..."
-              keyboardType="numeric"
               secureTextEntry={hidePass} //* esconde a senha quando digitada *//
               maxLength={6}
             />

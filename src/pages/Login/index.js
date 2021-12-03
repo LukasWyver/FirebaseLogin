@@ -5,11 +5,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Keyboard,
 } from "react-native";
 import LogoSvg from "./../../assets/logo.svg";
 import GoogleLogoSvg from "./../../assets/googleLogo.svg";
+
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+
+import firebase from "../../Auth/firebaseConnection";
+
+console.disableYellowBox = true;
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -19,6 +25,23 @@ export default function Login() {
 
   function SignUp() {
     navigation.navigate("SignUp");
+  }
+
+  async function LoginWithEmail() {
+    await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, senha)
+      .then((value) => {
+        alert("Bem vindo!");
+      })
+      .catch((error) => {
+        alert("Ops deu algo errado!");
+        return;
+      });
+    setEmail("");
+    setSenha("");
+    Keyboard.dismiss();
+    navigation.navigate("Home");
   }
 
   return (
@@ -58,7 +81,6 @@ export default function Login() {
               value={senha}
               onChangeText={(number) => setSenha(number)}
               placeholder="Digite sua senha..."
-              keyboardType="numeric"
               secureTextEntry={hidePass} //* esconde a senha quando digitada *//
               maxLength={6}
             />
@@ -81,6 +103,7 @@ export default function Login() {
         <View>
           <TouchableOpacity
             style={[styles.buttonLogin, { backgroundColor: "#f8774a" }]}
+            onPress={LoginWithEmail}
           >
             <Text style={styles.textFooter}>Login</Text>
           </TouchableOpacity>
