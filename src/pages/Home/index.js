@@ -4,7 +4,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import WelcomeSvg from "./../../assets/welcome.svg";
 
-export default function Home() {
+export default function Home({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -12,7 +12,7 @@ export default function Home() {
       </View>
 
       <View style={styles.main}>
-        <Text style={styles.title}>Bem Vindo!</Text>
+        <Text style={styles.title}>Bem Vindo {route.params?.name}!</Text>
         <Text style={styles.text}>
           Desbloqueie o mundo dos alimentos regulares e resgatados, configurando
           seu endereço de entrega.

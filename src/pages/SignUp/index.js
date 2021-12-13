@@ -13,6 +13,8 @@ import LogoSvg from "./../../assets/logo.svg";
 import FbLogoSvg from "../../assets/fbLogo.svg";
 import GoogleLogoSvg from "./../../assets/googleLogo.svg";
 
+import firebase from "../../Auth/firebaseConnection";
+
 export default function SignUp() {
   const navigation = useNavigation();
   const [name, setName] = useState("");
@@ -20,6 +22,34 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [hidePass, setHidePass] = useState(true);
   const [passwordConfirm, setPasswordConfirm] = useState("");
+
+  async function SignUpWithEmail() {
+    await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((value) => {
+        alert("usuario criado: " + name);
+        navigation.navigate("Home", { name: name });
+      })
+      .catch((error) => {
+        if (error.code === "auth/weak-password") {
+          alert("sua senha deve ter pelo menos 6 caracteres");
+          return;
+        }
+        if (error.code === "auth/invalid-email") {
+          alert("email invalido, por favor revise o email digitado");
+          return;
+        } else {
+          alert("Ops aldo deu errado!");
+          return;
+        }
+      });
+    setName("");
+    setEmail("");
+    setPassword("");
+    setPasswordConfirm("");
+    Keyboard.dismiss();
+  }
 
   return (
     <View style={styles.container}>
@@ -66,7 +96,8 @@ export default function SignUp() {
             style={styles.textInput}
             value={name}
             onChangeText={(name) => setName(name)}
-            placeholder="Nome"
+            placeholder="Primeiro nome"
+            maxLength={10}
           />
           <TextInput
             style={styles.textInput}
@@ -79,9 +110,8 @@ export default function SignUp() {
             <TextInput
               style={styles.textInput}
               value={password}
-              onChangeText={(number) => setPassword(number)}
+              onChangeText={(pass) => setPassword(pass)}
               placeholder="Digite sua senha..."
-              keyboardType="numeric"
               secureTextEntry={hidePass} //* esconde a senha quando digitada *//
               maxLength={6}
             />
@@ -101,7 +131,7 @@ export default function SignUp() {
             <TextInput
               style={styles.textInput}
               value={passwordConfirm}
-              onChangeText={(number) => setPasswordConfirm(number)}
+              onChangeText={(pass) => setPasswordConfirm(pass)}
               placeholder="Confirme sua senha..."
               secureTextEntry={hidePass} //* esconde a senha quando digitada *//
               maxLength={6}
@@ -120,7 +150,10 @@ export default function SignUp() {
         </View>
 
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity style={styles.buttonSignUp}>
+          <TouchableOpacity
+            style={styles.buttonSignUp}
+            onPress={SignUpWithEmail}
+          >
             <Text style={styles.textButton}>Inscrever-se</Text>
           </TouchableOpacity>
 

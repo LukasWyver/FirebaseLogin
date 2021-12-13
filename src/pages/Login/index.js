@@ -28,20 +28,23 @@ export default function Login() {
   }
 
   async function LoginWithEmail() {
-    await firebase
-      .auth()
-      .signInWithEmailAndPassword(email, senha)
-      .then((value) => {
-        alert("Bem vindo!");
-      })
-      .catch((error) => {
-        alert("Ops deu algo errado!");
-        return;
-      });
-    setEmail("");
-    setSenha("");
-    Keyboard.dismiss();
-    navigation.navigate("Home");
+    if (email !== "" && senha !== "") {
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, senha)
+        .then((value) => {
+          navigation.navigate("Home");
+        })
+        .catch((error) => {
+          alert("Ops deu algo errado!");
+          return;
+        });
+      setEmail("");
+      setSenha("");
+      Keyboard.dismiss();
+    } else {
+      alert("preencha todos os campos primeiro!");
+    }
   }
 
   return (
